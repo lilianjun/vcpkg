@@ -1,13 +1,13 @@
-set(OSG_VER 3.6.5)
+set(OSG_VER 3.6.6-llj)
 
 vcpkg_from_github(
 	OUT_SOURCE_PATH SOURCE_PATH
-	REPO openscenegraph/OpenSceneGraph
-	REF OpenSceneGraph-${OSG_VER}
-	SHA512 7002fa30a3bcf6551d2e1050b4ca75a3736013fd190e4f50953717406864da1952deb09f530bc8c5ddf6e4b90204baec7dbc283f497829846d46d561f66feb4b
+	REPO lilianjun/OpenSceneGraph
+	REF 4ef37a71dfab5e1b6a9e4fdb296c92202ad73466
+	SHA512 377d9f02678b9d729c6cf7e7cf2ba29d4cf9f8f32d80f5c03a7ac0874dde11a8047fe7d60bf95973eb6589bf241205c3b3b2abb7920700eedd9d387f6a8bb2d6
 	HEAD_REF master
     PATCHES
-        collada.patch
+        #collada.patch
         static.patch
         fix-sdl.patch
         fix-example-application.patch
@@ -16,7 +16,7 @@ vcpkg_from_github(
         remove-prefix.patch # Remove this patch when cmake fix Findosg_functions.cmake
         fix-liblas.patch
         fix-nvtt.patch
-        use-boost-asio.patch
+        #use-boost-asio.patch
         fix-dependency-coin.patch
 )
 
@@ -71,6 +71,23 @@ vcpkg_configure_cmake(
         -DDYNAMIC_OPENTHREADS=${OSG_DYNAMIC}
         -DBUILD_DASHBOARD_REPORTS=OFF
         -DCMAKE_CXX_STANDARD=11
+-DBUILD_DASHBOARD_REPORTS=OFF
+        -DCMAKE_CXX_STANDARD=11
+	-DOSG_TEXT_USE_FONTCONFIG=OFF
+	-DOSG_GL1_AVAILABLE=OFF
+	-DOSG_GL2_AVAILABLE=OFF
+	-DOSG_GL3_AVAILABLE=OFF
+	-DOSG_GLES1_AVAILABLE=OFF
+	-DOSG_GLES2_AVAILABLE=OFF
+	-DOSG_GLES3_AVAILABLE=ON
+	-DOPENGL_PROFILE=GLES3
+	-DOSG_DISPLAYLISTS_AVAILABLE=OFF
+	-DOSG_GL_FIXED_FUNCTION_AVAILABLE=OFF
+	-DOSG_USE_FLOAT_BOUNDINGBOX=ON
+	-DOSG_USE_FLOAT_BOUNDINGSPHERE=ON
+	-DOSG_USE_FLOAT_MATRIX=ON
+	-DOSG_USE_FLOAT_PLANE=ON
+	-DOSG_USE_FLOAT_QUAT=ON
          ${OPTIONS}
 )
 
@@ -126,6 +143,10 @@ if (OSG_PLUGINS_REL)
     file(COPY ${OSG_PLUGINS_REL} DESTINATION ${OSG_TOOL_PATH}/osgPlugins-${OSG_VER})
 endif()
 file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/bin/osgPlugins-${OSG_VER}/ ${CURRENT_PACKAGES_DIR}/debug/bin/osgPlugins-${OSG_VER}/)
+
+#remove lib/cmake -llj
+file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/lib/cmake)
+file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/lib/cmake)
 
 #Cleanup
 file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/share)
