@@ -4,6 +4,7 @@ Port-Version: 5
 Homepage: https://github.com/openscenegraph/OpenSceneGraph
 Description:  The OpenSceneGraph is an open source high performance 3D graphics toolkit.
 Build-Depends: zlib, freeglut (windows), expat (windows), openimageio (osx)
+Default-Features: plugins
 
 Feature: collada
 Description: Support for Collada (.dae) files
@@ -19,7 +20,7 @@ Build-Depends: freetype, sdl1, sdl2, libiconv (windows)
 
 Feature: plugins
 Description: Build OSG Plugins - Disable for compile testing examples on a time limit
-Build-Depends: freetype, curl, giflib (windows), libjpeg-turbo, libpng, tiff, libxml2 (windows), libiconv (windows), libgta
+Build-Depends: freetype, curl, giflib (windows), libjpeg-turbo(windows,android), libpng(windows,android), tiff(windows,android), libxml2 (windows), libiconv (windows)
 
 Feature: packages
 Description: Set to ON to generate CPack configuration files and packaging targets

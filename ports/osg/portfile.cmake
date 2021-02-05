@@ -3,8 +3,8 @@ set(OSG_VER 3.6.6-llj)
 vcpkg_from_github(
 	OUT_SOURCE_PATH SOURCE_PATH
 	REPO lilianjun/OpenSceneGraph
-	REF 4ef37a71dfab5e1b6a9e4fdb296c92202ad73466
-	SHA512 377d9f02678b9d729c6cf7e7cf2ba29d4cf9f8f32d80f5c03a7ac0874dde11a8047fe7d60bf95973eb6589bf241205c3b3b2abb7920700eedd9d387f6a8bb2d6
+	REF 71084a89002047463c5d1bc222b8f3596e48ca8f
+	SHA512 b2d23f8c0bf1e2f5dff1d340b9857a9dc9bb09bb39cfad20738af26c0311b332cffd299dfd0ef2f48e7c046b213198cbc4d3ded965727f204eb773dabda7e671
 	HEAD_REF master
     PATCHES
         #collada.patch
@@ -64,14 +64,14 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
 )
 
 vcpkg_configure_cmake(
-    SOURCE_PATH ${SOURCE_PATH}
-    OPTIONS ${FEATURE_OPTIONS}
+   	SOURCE_PATH ${SOURCE_PATH}
+   	OPTIONS ${FEATURE_OPTIONS}
         -DOSG_USE_UTF8_FILENAME=${OSG_USE_UTF8_FILENAME}
         -DDYNAMIC_OPENSCENEGRAPH=${OSG_DYNAMIC}
         -DDYNAMIC_OPENTHREADS=${OSG_DYNAMIC}
         -DBUILD_DASHBOARD_REPORTS=OFF
         -DCMAKE_CXX_STANDARD=11
--DBUILD_DASHBOARD_REPORTS=OFF
+	-DBUILD_DASHBOARD_REPORTS=OFF
         -DCMAKE_CXX_STANDARD=11
 	-DOSG_TEXT_USE_FONTCONFIG=OFF
 	-DOSG_GL1_AVAILABLE=OFF
@@ -88,6 +88,13 @@ vcpkg_configure_cmake(
 	-DOSG_USE_FLOAT_MATRIX=ON
 	-DOSG_USE_FLOAT_PLANE=ON
 	-DOSG_USE_FLOAT_QUAT=ON
+	-DOSG_BUILD_PLATFORM_IPHONE=ON
+	-DIPHONE_SDKVER=14.4
+	-DOSG_WINDOWING_SYSTEM:STRING=IOS
+	-DCMAKE_OSX_SYSROOT=iphonesimulator
+	#-DIPHONE_DEVROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer
+	#-DIPHONE_SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator14.4.sdk
+	#-DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator14.4.sdk
          ${OPTIONS}
 )
 
