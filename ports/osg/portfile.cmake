@@ -63,6 +63,22 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     docs BUILD_REF_DOCS_TAGFILE
 )
 
+if(VCPKG_TARGET_IS_IOS)
+	list(APPEND OPTIONS -DOSG_BUILD_PLATFORM_IPHONE=ON)
+	list(APPEND OPTIONS -DOSG_WINDOWING_SYSTEM:STRING=IOS)
+	#list(APPEND OPTIONS -DCMAKE_OSX_DEPLOYMENT_TARGET=10.3)
+	#list(APPEND OPTIONS -DIPHONES_DEPLOYMENT_TARGET=10.3)
+	list(APPEND OPTIONS -DCMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET=10.0)
+	#-DIPHONE_DEVROOT=/
+	#-DIPHONE_SDKROOT=
+	#-DCMAKE_OSX_SYSROOT=
+	if(VCPKG_TARGET_ARCHITECTURE STREQUAL "arm64")
+		list(APPEND OPTIONS -DCMAKE_OSX_SYSROOT=iPhoneOS)
+	elseif(VCPKG_TARGET_ARCHITECTURE STREQUAL "x64")
+		list(APPEND OPTIONS -DCMAKE_OSX_SYSROOT=iPhoneSimulator)
+	endif()
+endif()
+
 vcpkg_configure_cmake(
    	SOURCE_PATH ${SOURCE_PATH}
    	OPTIONS ${FEATURE_OPTIONS}
@@ -88,13 +104,6 @@ vcpkg_configure_cmake(
 	-DOSG_USE_FLOAT_MATRIX=ON
 	-DOSG_USE_FLOAT_PLANE=ON
 	-DOSG_USE_FLOAT_QUAT=ON
-	-DOSG_BUILD_PLATFORM_IPHONE=ON
-	-DIPHONE_SDKVER=14.4
-	-DOSG_WINDOWING_SYSTEM:STRING=IOS
-	-DCMAKE_OSX_SYSROOT=iphonesimulator
-	#-DIPHONE_DEVROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer
-	#-DIPHONE_SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator14.4.sdk
-	#-DCMAKE_OSX_SYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator14.4.sdk
          ${OPTIONS}
 )
 
