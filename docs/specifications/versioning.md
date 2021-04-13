@@ -1,5 +1,9 @@
 # Versioning Specification 
 
+**Note: this is the feature as it was initially specified and does not necessarily reflect the current behavior.**
+
+**Up-to-date documentation is available at [Versioning](../users/versioning.md).**
+
 ## Glossary
 Some of the terms used in this document have similar meaning when discussed by the community, and because of that, they can cause confusion and ambiguity. To solve this issue, we will assign specific meaning to these terms and try to keep a consistent usage through the document.
 
@@ -171,7 +175,7 @@ Baselines are used to set lower boundaries on package versions. A baseline effec
 
 But what is a baseline?
 
-In the main registry, the baseline is a file located in `${VCPKG_ROOT}/port_versions/baseline.json`. This file contains a version declaration for each package in vcpkg. The format of this file is the following:
+In the main registry, the baseline is a file located in `${VCPKG_ROOT}/versions/baseline.json`. This file contains a version declaration for each package in vcpkg. The format of this file is the following:
 
 ```json
 {
@@ -319,9 +323,9 @@ Although the concept of package versions has always been present in vcpkg, the c
 
 With the introduction of versioning constraints, it is now possible that a package depends on a port version that does not match the one available locally.  This raises a problem as vcpkg needs to know how to acquire the port files for the requested version.
 
-To solve this problem, a new set of metadata needs to be introduced. This specification proposes a that a new “port_versions” folder is added as part of a registry. In the main vcpkg registry, this means a new root level port_versions directory. 
+To solve this problem, a new set of metadata needs to be introduced. This specification proposes a that a new "versions" folder is added as part of a registry. In the main vcpkg registry, this means a new root level versions directory. 
 
-The port_versions directory, from here on referred as the versions database, will contain JSON files for each one of the ports available in the registry. Each file will list all the versions available for a package and contain a Git tree-ish object that vcpkg can check out to obtain that version’s portfiles. 
+The versions directory, from here on referred as the versions database, will contain JSON files for each one of the ports available in the registry. Each file will list all the versions available for a package and contain a Git tree-ish object that vcpkg can check out to obtain that version’s portfiles. 
 
 As part of the versioning implementation, a generator for these database files will be implemented. The generator will extract from our repository’s Git history, all the versions of each port that had been available at any moment in time and compile them into these database files. 
 
@@ -349,5 +353,5 @@ Example: generated `zlib.json`
 }
 ```
 
-For each port, its corresponding versions file should be located in  `port_versions/{first letter of port name}-/{port name}.json`. For example, zlib’s version file will be located in `port_versions/z-/zlib.json`.
-Aside from port version files, the current baseline file is located in `port_versions/baseline.json`. 
+For each port, its corresponding versions file should be located in  `versions/{first letter of port name}-/{port name}.json`. For example, zlib’s version file will be located in `versions/z-/zlib.json`.
+Aside from port version files, the current baseline file is located in `versions/baseline.json`. 

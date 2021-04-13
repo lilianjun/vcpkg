@@ -69,6 +69,14 @@ Examples:
   * The Azure SDKs (of the form `azure-Xxx`) have a `public-preview` feature.
   * `imgui` has an `experimental-docking` feature which engages their preview docking branch which uses a merge commit attached to each of their public numbered releases.
 
+### Default features should enable behaviors, not APIs
+
+If a consumer is depending directly upon a library, they can list out any desired features easily (`library[feature1,feature2]`). However, if a consumer _does not know_ they are using a library, they cannot list out those features. If that hidden library is like `libarchive` where features are adding additional compression algorithms (and thus behaviors) to an existing generic interface, default features offer a way to ensure a reasonably functional transitive library is built even if the final consumer doesn't name it directly.
+
+If the feature adds additional APIs (or executables, or library binaries) and doesn't modify the behavior of existing APIs, it should be left off by default. This is because any consumer which might want to use those APIs can easily require it via their direct reference.
+
+If in doubt, do not mark a feature as default.
+
 ### Do not use features to control alternatives in published interfaces
 
 If a consumer of a port depends on only the core functionality of that port, with high probability they must not be broken by turning on the feature. This is even more important when the alternative is not directly controlled by the consumer, but by compiler settings like `/std:c++17` / `-std=c++17`.
@@ -188,7 +196,7 @@ files into manifest files. Do not convert CONTROL files that have not been modif
 
 ### Follow common conventions for the `"version"` field
 
-See our [manifest files document](manifest-files.md#version-fields) for a full explanation of our conventions.
+See our [versioning documentation](../users/versioning.md#version-schemes) for a full explanation of our conventions.
 
 ### Update the `"port-version"` field in the manifest file of any modified ports
 
@@ -204,16 +212,16 @@ For Example:
 
 See our [manifest files document](manifest-files.md#port-version) for a full explanation of our conventions.
 
-### Update the version files in `port_versions/` of any modified ports
+### Update the version files in `versions/` of any modified ports
 
 Vcpkg uses a set of metadata files to power its versioning feature.
 These files are located in the following locations:
-* `${VCPKG_ROOT}/port_versions/baseline.json`, (this file is common to all ports) and
-* `${VCPKG_ROOT}/port_versions/${first-letter-of-portname}-/${portname}.json` (one per port).
+* `${VCPKG_ROOT}/versions/baseline.json`, (this file is common to all ports) and
+* `${VCPKG_ROOT}/versions/${first-letter-of-portname}-/${portname}.json` (one per port).
 
 For example, for `zlib` the relevant files are:
-* `${VCPKG_ROOT}/port_versions/baseline.json`
-* `${VCPKG_ROOT}/port_versions/z-/zlib.json`
+* `${VCPKG_ROOT}/versions/baseline.json`
+* `${VCPKG_ROOT}/versions/z-/zlib.json`
 
 We expect that each time you update a port, you also update its version files.
 
@@ -229,7 +237,7 @@ If you're updating multiple ports at the same time, instead you can run:
 vcpkg x-add-version --all
 ```
 
-To update the files for all modified ports at once.  
+To update the files for all modified ports at once.
 
 _NOTE: These commands require you to have committed your changes to the ports before running them. The reason is that the Git SHA of the port directory is required in these version files. But don't worry, the `x-add-version` command will warn you if you have local changes that haven't been committed._
 
